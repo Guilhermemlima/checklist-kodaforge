@@ -46,8 +46,11 @@ function tagClass(format) {
 // ── Date ───────────────────────────────────
 function setDate() {
   const d = new Date();
-  document.getElementById('currentDate').textContent =
-    d.toLocaleDateString('pt-BR', { weekday:'short', day:'2-digit', month:'short' });
+  const day  = d.toLocaleDateString('pt-BR', { weekday:'long', day:'2-digit', month:'long' });
+  const el = document.getElementById('currentDate');
+  if (el) {
+    el.innerHTML = `${day.charAt(0).toUpperCase() + day.slice(1)}<span>${d.getFullYear()}</span>`;
+  }
 }
 
 // ── Nav ────────────────────────────────────
@@ -243,16 +246,22 @@ function renderChecklists() {
   grid.innerHTML = partners.map(p => {
     const tasks = state.checklists[p];
     if (!tasks.length) return '';
-    const done = tasks.filter(t => t.done).length;
+    const done  = tasks.filter(t => t.done).length;
+    const pct   = tasks.length ? Math.round((done / tasks.length) * 100) : 0;
     const initials = state.partners[p].split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
     return `
-      <div class="partner-card">
+      <div class="partner-card" data-p="${p}">
         <div class="partner-card-header">
           <div class="partner-name">
             <div class="partner-avatar ${avClass[p]}">${initials}</div>
             ${state.partners[p]}
           </div>
-          <span class="progress-ring">${done}/${tasks.length}</span>
+          <div class="progress-wrap">
+            <span class="progress-text">${done}/${tasks.length}</span>
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill" style="width:${pct}%"></div>
+            </div>
+          </div>
         </div>
         <ul class="task-list">
           ${tasks.map((t, i) => `
