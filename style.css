@@ -203,6 +203,7 @@ nav { display: flex; flex-direction: column; gap: 4px; flex: 1; }
 .av-1 { background: rgba(108,99,255,.25); color: var(--accent2); }
 .av-2 { background: rgba(34,197,94,.2); color: var(--green); }
 .av-3 { background: rgba(249,115,22,.2); color: var(--orange); }
+.av-4 { background: rgba(236,72,153,.2); color: var(--pink); }
 
 .progress-ring { font-size: 12px; color: var(--text3); }
 
@@ -486,9 +487,69 @@ select:focus, input[type="text"]:focus { border-color: var(--accent); box-shadow
 ::-webkit-scrollbar-thumb:hover { background: var(--text3); }
 
 /* ── Responsive ── */
-@media (max-width: 700px) {
-  .sidebar { width: 56px; min-width: 56px; padding: 16px 8px; }
-  .logo-text, .nav-btn span:last-child { display: none; }
-  .nav-btn { justify-content: center; padding: 10px; }
-  .main { padding: 20px 16px; }
+@media (max-width: 768px) {
+  body { flex-direction: column; overflow: auto; }
+
+  /* Sidebar vira barra de navegação no topo */
+  .sidebar {
+    width: 100%;
+    min-width: unset;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 16px;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    gap: 0;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .logo { padding: 0 12px 0 0; border-bottom: none; margin-bottom: 0; border-right: 1px solid var(--border); }
+  .logo-text { font-size: 15px; }
+  nav { flex-direction: row; flex: 1; justify-content: center; gap: 4px; }
+  .nav-btn { padding: 8px 12px; font-size: 13px; white-space: nowrap; }
+  .nav-icon { font-size: 15px; }
+  .sidebar-footer { display: none; }
+
+  .main { padding: 20px 14px; overflow: visible; height: auto; }
+
+  /* Checklist grid — 1 coluna */
+  .checklist-grid { grid-template-columns: 1fr; }
+
+  /* Partners bar — scroll horizontal */
+  .partners-bar { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
+  .partners-bar::-webkit-scrollbar { height: 0; }
+  .partner-btn { white-space: nowrap; flex-shrink: 0; }
+
+  /* AI controls row — stack vertical */
+  .ai-row { flex-direction: column; align-items: stretch; }
+  .ai-row select, .ai-row .btn-primary { width: 100%; }
+
+  /* Generator grid — 1 coluna */
+  .gen-grid { grid-template-columns: 1fr; }
+
+  /* Prompts grid — 1 coluna */
+  .prompts-grid { grid-template-columns: 1fr; }
+
+  /* Prompt body — evita overflow horizontal */
+  .prompt-body { word-break: break-word; overflow-wrap: anywhere; }
+
+  /* Conv tabs — scroll horizontal */
+  .conv-tabs { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
+  .conv-tabs::-webkit-scrollbar { height: 0; }
+  .conv-tab-btn { white-space: nowrap; flex-shrink: 0; }
+
+  /* Filter bar — scroll horizontal */
+  .filter-bar { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
+  .filter-bar::-webkit-scrollbar { height: 0; }
+  .filter-btn { white-space: nowrap; flex-shrink: 0; }
+
+  /* Modal */
+  .modal { width: 95vw; padding: 20px; }
+
+  /* Toast */
+  .toast { left: 14px; right: 14px; bottom: 16px; text-align: center; }
+
+  /* Tab header */
+  .tab-header h1 { font-size: 20px; }
 }

@@ -4,8 +4,8 @@
 
 // ── State ──────────────────────────────────
 const state = {
-  partners: { socio1: 'Sócio 1', socio2: 'Sócio 2', socio3: 'Sócio 3' },
-  checklists: { socio1: [], socio2: [], socio3: [] },
+  partners: { socio1: 'Sócio 1', socio2: 'Sócio 2', socio3: 'Sócio 3', socio4: 'Sócio 4' },
+  checklists: { socio1: [], socio2: [], socio3: [], socio4: [] },
   igPrompts: [],
   convPrompts: [],
   activePartnerFilter: 'all',
@@ -65,6 +65,7 @@ document.getElementById('editPartnersBtn').addEventListener('click', () => {
   document.getElementById('nameS1').value = state.partners.socio1;
   document.getElementById('nameS2').value = state.partners.socio2;
   document.getElementById('nameS3').value = state.partners.socio3;
+  document.getElementById('nameS4').value = state.partners.socio4;
   document.getElementById('partnersModal').classList.add('open');
 });
 document.getElementById('closeModal').addEventListener('click', () =>
@@ -73,20 +74,23 @@ document.getElementById('savePartners').addEventListener('click', () => {
   const n1 = document.getElementById('nameS1').value.trim() || 'Sócio 1';
   const n2 = document.getElementById('nameS2').value.trim() || 'Sócio 2';
   const n3 = document.getElementById('nameS3').value.trim() || 'Sócio 3';
-  state.partners = { socio1: n1, socio2: n2, socio3: n3 };
+  const n4 = document.getElementById('nameS4').value.trim() || 'Sócio 4';
+  state.partners = { socio1: n1, socio2: n2, socio3: n3, socio4: n4 };
   saveToStorage('partners', state.partners);
-  // update button labels
   document.getElementById('btn-socio1').textContent = n1;
   document.getElementById('btn-socio2').textContent = n2;
   document.getElementById('btn-socio3').textContent = n3;
+  document.getElementById('btn-socio4').textContent = n4;
   document.querySelectorAll('[data-partner]').forEach(b => {
     if (b.dataset.partner === 'socio1') b.textContent = n1;
     if (b.dataset.partner === 'socio2') b.textContent = n2;
     if (b.dataset.partner === 'socio3') b.textContent = n3;
+    if (b.dataset.partner === 'socio4') b.textContent = n4;
   });
   document.querySelectorAll('option[value="socio1"]').forEach(o => o.textContent = n1);
   document.querySelectorAll('option[value="socio2"]').forEach(o => o.textContent = n2);
   document.querySelectorAll('option[value="socio3"]').forEach(o => o.textContent = n3);
+  document.querySelectorAll('option[value="socio4"]').forEach(o => o.textContent = n4);
   document.getElementById('partnersModal').classList.remove('open');
   renderChecklists();
   toast('Nomes atualizados!', 'success');
@@ -197,7 +201,7 @@ function pickTasks(focus, count = 5, seed = 0) {
 
 function generateChecklists(focus, targetPartner, context) {
   const partners = targetPartner === 'all'
-    ? ['socio1', 'socio2', 'socio3']
+    ? ['socio1', 'socio2', 'socio3', 'socio4']
     : [targetPartner];
 
   const today = new Date();
@@ -221,10 +225,10 @@ function renderChecklists() {
   const grid = document.getElementById('checklistGrid');
   const filter = state.activePartnerFilter;
   const partners = filter === 'all'
-    ? ['socio1', 'socio2', 'socio3']
+    ? ['socio1', 'socio2', 'socio3', 'socio4']
     : [filter];
 
-  const avClass = { socio1:'av-1', socio2:'av-2', socio3:'av-3' };
+  const avClass = { socio1:'av-1', socio2:'av-2', socio3:'av-3', socio4:'av-4' };
 
   const anyTasks = partners.some(p => state.checklists[p].length > 0);
   if (!anyTasks) {
@@ -993,19 +997,16 @@ function init() {
   // load persisted state
   const savedPartners = loadFromStorage('partners', null);
   if (savedPartners) {
-    state.partners = savedPartners;
-    document.getElementById('btn-socio1').textContent = savedPartners.socio1;
-    document.getElementById('btn-socio2').textContent = savedPartners.socio2;
-    document.getElementById('btn-socio3').textContent = savedPartners.socio3;
-    document.querySelectorAll('[data-partner="socio1"]').forEach(e => { if (e.tagName === 'BUTTON') e.textContent = savedPartners.socio1; });
-    document.querySelectorAll('[data-partner="socio2"]').forEach(e => { if (e.tagName === 'BUTTON') e.textContent = savedPartners.socio2; });
-    document.querySelectorAll('[data-partner="socio3"]').forEach(e => { if (e.tagName === 'BUTTON') e.textContent = savedPartners.socio3; });
-    document.querySelectorAll('option[value="socio1"]').forEach(o => o.textContent = savedPartners.socio1);
-    document.querySelectorAll('option[value="socio2"]').forEach(o => o.textContent = savedPartners.socio2);
-    document.querySelectorAll('option[value="socio3"]').forEach(o => o.textContent = savedPartners.socio3);
+    state.partners = { socio4: 'Sócio 4', ...savedPartners };
+    ['socio1','socio2','socio3','socio4'].forEach(k => {
+      const btn = document.getElementById('btn-' + k);
+      if (btn) btn.textContent = state.partners[k];
+      document.querySelectorAll(`[data-partner="${k}"]`).forEach(e => { if (e.tagName === 'BUTTON') e.textContent = state.partners[k]; });
+      document.querySelectorAll(`option[value="${k}"]`).forEach(o => o.textContent = state.partners[k]);
+    });
   }
 
-  state.checklists = loadFromStorage('checklists', { socio1:[], socio2:[], socio3:[] });
+  state.checklists = loadFromStorage('checklists', { socio1:[], socio2:[], socio3:[], socio4:[] });
   state.igPrompts  = loadFromStorage('igPrompts', []);
   state.convPrompts = loadFromStorage('convPrompts', []);
 
