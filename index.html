@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Koda Forge — Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <span class="logo-icon">⚡</span>
+      <span class="logo-text">Koda Forge</span>
+    </div>
+    <nav>
+      <button class="nav-btn active" data-tab="checklist">
+        <span class="nav-icon">✅</span> Checklist Diária
+      </button>
+      <button class="nav-btn" data-tab="instagram">
+        <span class="nav-icon">📸</span> Conteúdo Instagram
+      </button>
+      <button class="nav-btn" data-tab="conversation">
+        <span class="nav-icon">💬</span> Prompts de Conversa
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="date-display" id="currentDate"></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <!-- ── CHECKLIST TAB ── -->
+    <section class="tab active" id="tab-checklist">
+      <div class="tab-header">
+        <h1>Checklist Diária</h1>
+        <p class="subtitle">Tarefas geradas por IA para cada sócio</p>
+      </div>
+
+      <div class="partners-bar">
+        <button class="partner-btn active" data-partner="all">Todos</button>
+        <button class="partner-btn" data-partner="socio1" id="btn-socio1">Sócio 1</button>
+        <button class="partner-btn" data-partner="socio2" id="btn-socio2">Sócio 2</button>
+        <button class="partner-btn" data-partner="socio3" id="btn-socio3">Sócio 3</button>
+        <button class="icon-btn" id="editPartnersBtn" title="Editar nomes dos sócios">✏️</button>
+      </div>
+
+      <div class="checklist-grid" id="checklistGrid"></div>
+
+      <div class="ai-controls card">
+        <h3>Gerar Tarefas com IA</h3>
+        <div class="ai-row">
+          <select id="focusSelect">
+            <option value="vendas">Vendas &amp; Prospecção</option>
+            <option value="marketing">Marketing &amp; Conteúdo</option>
+            <option value="produto">Produto &amp; Desenvolvimento</option>
+            <option value="financeiro">Financeiro &amp; Gestão</option>
+            <option value="geral">Geral</option>
+          </select>
+          <select id="partnerSelect">
+            <option value="all">Todos os sócios</option>
+            <option value="socio1">Sócio 1</option>
+            <option value="socio2">Sócio 2</option>
+            <option value="socio3">Sócio 3</option>
+          </select>
+          <button class="btn-primary" id="generateChecklist">
+            ✨ Gerar Checklist
+          </button>
+        </div>
+        <div class="context-row">
+          <input type="text" id="contextInput" placeholder="Contexto extra (ex: lançamento em 3 dias, reunião com cliente X...)" />
+        </div>
+      </div>
+    </section>
+
+    <!-- ── INSTAGRAM TAB ── -->
+    <section class="tab" id="tab-instagram">
+      <div class="tab-header">
+        <h1>Conteúdo Instagram</h1>
+        <p class="subtitle">Prompts prontos para criação de posts, reels e stories</p>
+      </div>
+
+      <div class="filter-bar">
+        <button class="filter-btn active" data-format="all">Tudo</button>
+        <button class="filter-btn" data-format="post">Post</button>
+        <button class="filter-btn" data-format="reel">Reel</button>
+        <button class="filter-btn" data-format="story">Story</button>
+        <button class="filter-btn" data-format="carrossel">Carrossel</button>
+      </div>
+
+      <div class="generator-card card">
+        <h3>Gerar Novo Prompt</h3>
+        <div class="gen-grid">
+          <div class="gen-field">
+            <label>Formato</label>
+            <select id="igFormat">
+              <option value="post">Post (feed)</option>
+              <option value="reel">Reel</option>
+              <option value="story">Story</option>
+              <option value="carrossel">Carrossel</option>
+            </select>
+          </div>
+          <div class="gen-field">
+            <label>Objetivo</label>
+            <select id="igGoal">
+              <option value="engajamento">Engajamento</option>
+              <option value="autoridade">Autoridade</option>
+              <option value="vendas">Vendas</option>
+              <option value="educativo">Educativo</option>
+              <option value="bastidores">Bastidores</option>
+              <option value="social proof">Social Proof</option>
+            </select>
+          </div>
+          <div class="gen-field">
+            <label>Tom</label>
+            <select id="igTone">
+              <option value="descontraído">Descontraído</option>
+              <option value="profissional">Profissional</option>
+              <option value="inspiracional">Inspiracional</option>
+              <option value="direto">Direto ao ponto</option>
+            </select>
+          </div>
+          <div class="gen-field">
+            <label>Nicho / Produto</label>
+            <input type="text" id="igNiche" placeholder="Ex: software para agências..." />
+          </div>
+        </div>
+        <button class="btn-primary full-width" id="generateIG">✨ Gerar Prompt</button>
+      </div>
+
+      <div class="prompts-grid" id="igPromptsGrid"></div>
+    </section>
+
+    <!-- ── CONVERSATION TAB ── -->
+    <section class="tab" id="tab-conversation">
+      <div class="tab-header">
+        <h1>Prompts de Conversa</h1>
+        <p class="subtitle">Iniciação e retomada de conversas com leads e clientes</p>
+      </div>
+
+      <div class="conv-tabs">
+        <button class="conv-tab-btn active" data-convtype="inicio">🚀 Iniciar Conversa</button>
+        <button class="conv-tab-btn" data-convtype="retomada">🔄 Retomar Conversa</button>
+        <button class="conv-tab-btn" data-convtype="followup">📩 Follow-up</button>
+      </div>
+
+      <div class="generator-card card">
+        <h3>Gerar Prompt de Conversa</h3>
+        <div class="gen-grid">
+          <div class="gen-field">
+            <label>Tipo</label>
+            <select id="convType">
+              <option value="inicio">Iniciar conversa</option>
+              <option value="retomada">Retomar conversa</option>
+              <option value="followup">Follow-up pós-reunião</option>
+            </select>
+          </div>
+          <div class="gen-field">
+            <label>Canal</label>
+            <select id="convChannel">
+              <option value="WhatsApp">WhatsApp</option>
+              <option value="Instagram DM">Instagram DM</option>
+              <option value="LinkedIn">LinkedIn</option>
+              <option value="E-mail">E-mail</option>
+            </select>
+          </div>
+          <div class="gen-field">
+            <label>Perfil do Lead</label>
+            <input type="text" id="convLead" placeholder="Ex: dono de agência de marketing..." />
+          </div>
+          <div class="gen-field">
+            <label>Contexto / Gancho</label>
+            <input type="text" id="convContext" placeholder="Ex: comentou no post sobre automação..." />
+          </div>
+        </div>
+        <button class="btn-primary full-width" id="generateConv">✨ Gerar Prompt</button>
+      </div>
+
+      <div class="prompts-grid" id="convPromptsGrid"></div>
+    </section>
+  </main>
+
+  <!-- MODAL editar sócios -->
+  <div class="modal-overlay" id="partnersModal">
+    <div class="modal">
+      <h3>Editar Nomes dos Sócios</h3>
+      <div class="modal-fields">
+        <label>Sócio 1 <input type="text" id="nameS1" /></label>
+        <label>Sócio 2 <input type="text" id="nameS2" /></label>
+        <label>Sócio 3 <input type="text" id="nameS3" /></label>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary" id="closeModal">Cancelar</button>
+        <button class="btn-primary" id="savePartners">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
